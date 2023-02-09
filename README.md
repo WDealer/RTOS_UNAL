@@ -1,2 +1,11 @@
 # RTOS_UNAL
-RTOS subject repository
+
+Repository with all avtivities made during RTOS subject.
+
+Microcontroller used: ESP-WROOM-32
+ESP IDF version: 4.3.3
+
+# Students: 
+
+* Jhon Alejandro Sanchez Sanabria C.C: 1053873573
+* Edwin 
