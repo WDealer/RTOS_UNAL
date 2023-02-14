@@ -1,6 +1,6 @@
 # RTOS_UNAL
 
-Repository with all avtivities made during RTOS subject.
+Repository with all activities made during RTOS subject.
 
 Microcontroller used: ESP-WROOM-32
 ESP IDF version: 4.3.3
