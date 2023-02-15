@@ -3,7 +3,9 @@
 Repository with all activities made during RTOS subject.
 
 Microcontroller used: ESP-WROOM-32
-ESP IDF version: 4.3.3
+ESP IDF version: 4.4.4
+
+
 
 ## Students: 
 
