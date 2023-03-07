@@ -1,3 +1,8 @@
 Blink_LED/.vscode/*
 Blink_LED/build/*
+RGB_LED/.vscode/*
+RGB_LED/build/*
+DHT_22_Sensor/.vscode/*
+DHT_22_Sensor/build/*
+RGB_LED/.devcontainer/*
 .vscode/*
