@@ -56,7 +56,7 @@ void rgb_button_task(void *arg)
     while(1)
     {
         button_status = gpio_get_level(INTERRUPTION_BUTTON);
-        if(button_status == 1)
+        if(button_status == 0)
         {
             color_index++;
             if(color_index > 2)
