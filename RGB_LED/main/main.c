@@ -56,7 +56,7 @@ void rgb_button_task(void *arg)
     while(1)
     {
         button_status = gpio_get_level(INTERRUPTION_BUTTON);
-        if(button_status == 0)
+        if(button_status == 1)
         {
             color_index++;
             if(color_index > 2)
@@ -97,7 +97,7 @@ void app_main()
     ledc_fade_func_install(0);
     
     /*Button pin intiallization*/
-    gpio_pad_select_gpio(INTERRUPTION_BUTTON);
+    esp_rom_gpio_pad_select_gpio(INTERRUPTION_BUTTON);
     gpio_set_direction(INTERRUPTION_BUTTON, GPIO_MODE_INPUT);
     gpio_set_pull_mode(INTERRUPTION_BUTTON, GPIO_PULLUP_ONLY);
 
