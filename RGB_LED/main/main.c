@@ -1,18 +1,76 @@
+/* 
+    LEDC fade pattern using interruption button task
+
+    PRESENTED BY:
+    Jhon Alejandro Sanchez Sanabria C.C: 1053873573
+    Edwin Andres Fiesco Cod: 817019
+*/
+
 #include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/gpio.h"
 #include "driver/ledc.h"
+#include "driver/uart.h"
+#include <string.h>
 
-#define LED_RED_CHANNEL           LEDC_CHANNEL_0
-#define LED_GREEN_CHANNEL         LEDC_CHANNEL_1
-#define LED_BLUE_CHANNEL          LEDC_CHANNEL_2
-#define LEDC_TEST_CH_NUM       (3)
+#define LED_RED_CHANNEL     LEDC_CHANNEL_0
+#define LED_GREEN_CHANNEL   LEDC_CHANNEL_1
+#define LED_BLUE_CHANNEL    LEDC_CHANNEL_2
+#define LEDC_TEST_CH_NUM    (3)
 
 #define LED_RED_PIN 18
 #define LED_GREEN_PIN 19
 #define LED_BLUE_PIN 21
 #define INTERRUPTION_BUTTON 26
+
+#define UART_NUM        UART_NUM_0
+#define BUF_SIZE        1024
+#define LED_RED         0
+#define LED_GREEN       1
+#define LED_BLUE        2
+
+
+int current_color = LED_RED;
+
+void uart_task(void *arg)
+{
+    uart_config_t uart_cfg = {
+        .baud_rate = 115200,
+        .data_bits = UART_DATA_8_BITS,
+        .parity    = UART_PARITY_DISABLE,
+        .stop_bits = UART_STOP_BITS_1,
+        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
+        .source_clk = UART_SCLK_APB
+    };
+    uart_param_config(UART_NUM, &uart_cfg);
+    uart_set_pin(UART_NUM, 1, 3, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
+    uart_driver_install(UART_NUM, BUF_SIZE, BUF_SIZE, 0, NULL, 0);
+
+    while(1)
+    {
+        uint8_t *data = (uint8_t *)malloc(BUF_SIZE);
+        int len = uart_read_bytes(UART_NUM, data, BUF_SIZE, 20 / portTICK_PERIOD_MS);
+        if(len > 0)
+        {
+            if(strncmp((const char *)data, "red", 3) == 0)
+            {
+                current_color = LED_RED;
+            }
+            else if(strncmp((const char *)data, "green", 5) == 0)
+            {
+                current_color = LED_GREEN;
+            }
+            else if(strncmp((const char *)data, "blue", 4) == 0)
+            {
+                current_color = LED_BLUE;
+            }
+        }
+        free(data);
+    }
+}
+
+
 
 /*Ledc timer configuration*/
 
@@ -51,43 +109,32 @@ ledc_channel_config_t ledc_channel[LEDC_TEST_CH_NUM] = {
 
 void rgb_button_task(void *arg)
 {
-    uint8_t button_status = 0;
-    uint8_t color_index = 0;
     while(1)
     {
-        button_status = gpio_get_level(INTERRUPTION_BUTTON);
-        if(button_status == 0)
+        switch(current_color)
         {
-            color_index++;
-            if(color_index > 2)
-            {
-                color_index = 0;
-            }
-            switch(color_index)
-            {
-                case 0:
-                /*ledc_fade_func used to set red led duty cycle*/
+            case LED_RED:
+            /*ledc_fade_func used to set red led duty cycle*/
                 ledc_set_fade_time_and_start(ledc_channel[LED_RED_CHANNEL].speed_mode,ledc_channel[LED_RED_CHANNEL].channel,0,500,LEDC_FADE_WAIT_DONE);
                 ledc_set_fade_time_and_start(ledc_channel[LED_RED_CHANNEL].speed_mode,ledc_channel[LED_RED_CHANNEL].channel,1024,500,LEDC_FADE_WAIT_DONE);
-                ledc_set_fade_time_and_start(ledc_channel[LED_RED_CHANNEL].speed_mode,ledc_channel[LED_RED_CHANNEL].channel,0,500,LEDC_FADE_WAIT_DONE);            
-                    break;
+                ledc_set_fade_time_and_start(ledc_channel[LED_RED_CHANNEL].speed_mode,ledc_channel[LED_RED_CHANNEL].channel,0,500,LEDC_FADE_WAIT_DONE);
+                break;
 
-                case 1:
-                /*ledc_fade_func used to set green led duty cycle*/
+            case LED_GREEN:
+            /*ledc_fade_func used to set green led duty cycle*/
                 ledc_set_fade_time_and_start(ledc_channel[LED_GREEN_CHANNEL].speed_mode,ledc_channel[LED_GREEN_CHANNEL].channel,0,500,LEDC_FADE_WAIT_DONE);
                 ledc_set_fade_time_and_start(ledc_channel[LED_GREEN_CHANNEL].speed_mode,ledc_channel[LED_GREEN_CHANNEL].channel,1024,500,LEDC_FADE_WAIT_DONE);
                 ledc_set_fade_time_and_start(ledc_channel[LED_GREEN_CHANNEL].speed_mode,ledc_channel[LED_GREEN_CHANNEL].channel,0,500,LEDC_FADE_WAIT_DONE);
-                    break;
+                break;
 
-                case 2:
-                /*ledc_fade_func used to set blue led duty cycle*/
+            case LED_BLUE:
+            /*ledc_fade_func used to set blue led duty cycle*/
                 ledc_set_fade_time_and_start(ledc_channel[LED_BLUE_CHANNEL].speed_mode,ledc_channel[LED_BLUE_CHANNEL].channel,0,500,LEDC_FADE_WAIT_DONE);
                 ledc_set_fade_time_and_start(ledc_channel[LED_BLUE_CHANNEL].speed_mode,ledc_channel[LED_BLUE_CHANNEL].channel,1024,500,LEDC_FADE_WAIT_DONE);
                 ledc_set_fade_time_and_start(ledc_channel[LED_BLUE_CHANNEL].speed_mode,ledc_channel[LED_BLUE_CHANNEL].channel,0,500,LEDC_FADE_WAIT_DONE);
-                    break;
-            }
-            vTaskDelay(100 / portTICK_PERIOD_MS);
+                break;
         }
+        vTaskDelay(100 / portTICK_PERIOD_MS);
     }
 }
 
@@ -111,4 +158,5 @@ void app_main()
 
     /*Task*/
     xTaskCreate(rgb_button_task, "rgb_button_task", 2048, NULL, 10, NULL);
+    xTaskCreate(uart_task, "uart_task", 2048, NULL, 10, NULL);
 }
