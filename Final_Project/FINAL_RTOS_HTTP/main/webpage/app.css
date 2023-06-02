@@ -1,0 +1,72 @@
+:root {
+    --color-background: #121212;
+    --color-text: #FFFFFF;
+    --color-headings: #BB86FC;
+    --color-green: #1DB954;
+    --color-red: #CF6679;
+}
+
+body {
+    background-color: var(--color-background);
+    font-family: Helvetica, Arial, sans-serif;
+    color: var(--color-text);
+}
+
+h1, h2, h3, h4 {
+    color: var(--color-headings);
+}
+
+h1 {
+    display: block;
+    text-align: center;
+    margin: 0;
+    padding: 10px;
+    font-size: 1.7em;
+}
+
+h2 { font-size: 1.4em; }
+
+h3 { font-size: 1.2em; }
+
+h4 { font-size: 1em; }
+
+.gr { color: var(--color-green); }
+
+.rd { color: var(--color-red); }
+
+.latest_firmware, .latest_firmware_label,
+.temperature_reading,
+.voltage_reading,
+.current_reading,
+.power_reading,
+.humidity_reading {
+    display: inline;
+    color: var(--color-headings);
+}
+
+.buttons { padding: 5px; }
+
+button {
+    font-size: 12px;
+    border: 0;
+    line-height: 2;
+    padding: 0 5px;
+    text-align: center;
+    color: #ffffff;
+    text-shadow: 1px 1px 1px #000;
+    border-radius: 10px;
+    background-color: #303030;
+    background-image: linear-gradient(to top left,
+                                      rgba(0, 0, 0, .2),
+                                      rgba(0, 0, 0, .2) 30%,
+                                      rgba(0, 0, 0, 0));
+    box-shadow: inset 2px 2px 3px rgba(255, 255, 255, .6),
+                inset -2px -2px 3px rgba(0, 0, 0, .6);
+}
+
+button:hover { background-color: #BB86FC; }
+
+button:active {
+    box-shadow: inset -2px -2px 3px rgba(255, 255, 255, .6),
+                inset 2px 2px 3px rgba(0, 0, 0, .6);
+}
