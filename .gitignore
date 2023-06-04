@@ -1,0 +1,11 @@
+Blink_LED/.vscode/*
+Blink_LED/build/*
+RGB_LED/.vscode/*
+RGB_LED/build/*
+DHT_22_Sensor/.vscode/*
+DHT_22_Sensor/build/*
+RGB_LED/.devcontainer/*
+.vscode/*
+Final_Project/FINAL_RTOS_HTTP/.vscode/*
+Final_Project/FINAL_RTOS_HTTP/build/*
+Final_Project/FINAL_RTOS_HTTP/.devcontainer

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<script src='jquery-3.3.1.min.js'></script>
+		<link rel="stylesheet" href="app.css">
+		<script async src="app.js"></script>
+		<title>ESP32 Udemy Course</title>
+	</head>
+	<body>
+	<header>
+		<h1>ESP32 Application Development</h1>
+	</header>
+		
+	<div id="OTA">
+	<h2>ESP32 Firmware Update</h2>
+		<label id="latest_firmware_label">Latest Firmware: </label>
+		<div id="latest_firmware"></div> 
+		<input type="file" id="selected_file" accept=".bin" style="display: none;" onchange="getFileInfo()" />
+		<div class="buttons">
+			<input type="button" value="Select File" onclick="document.getElementById('selected_file').click();" />
+			<input type="button" value="Update Firmware" onclick="updateFirmware()" />
+		</div>
+		<h4 id="file_info"></h4>	
+		<h4 id="ota_update_status"></h4>
+	</div>
+	<hr>
+		
+	<div id="DHT22Sensor">
+		<h2>DATA Reading</h2>
+		<label for="temperature_reading">Temperature: </label>
+		<div id="temperature_reading"></div>
+		<br><br>
+		<label for="voltage_reading">Voltage: </label>
+		<div id="voltage_reading"></div>
+		<br><br>
+		<label for="current_reading">Current: </label>
+		<div id="current_reading"></div>  
+		<br><br>
+		<label for="power_reading">Power: </label>
+		<div id="power_reading"></div> 
+	</div>
+	<hr>
+		
+	<div id="WiFiConnect">
+		<h2>ESP32 Interaction</h2>
+		<section>
+			<h3>RGB Handler</h3>
+			<input id="red_val" type="number" step="1" placeholder="red value" value="0">
+			<input id="green_val" type="number" placeholder="green value" value="0">
+			<input id="blue_val" type="number" placeholder="blue value" value="0">
+		</section>
+		<div class="buttons">
+			<input id="send_rgb" type="button" value="send values" />
+		</section>
+		<div class="buttons">
+			<h3>LED_GPIO_2 test Handler</h3>
+			<input id="toogle_led" type="button" value="toogle board led" />
+		</div>
+		<br><br>
+		<section>
+			<h3>Power Treshold Handler</h3>
+			<input id="min_val" type="number" placeholder="min value" value="0">
+			<input id="max_val" type="number" placeholder="max value" value="0">
+		</section>
+		<div class="buttons">
+			<input id="tresholdRed" type="button" value="Treshold Red" />
+			<input id="tresholdGreen" type="button" value="Treshold Green" />
+			<input id="tresholdBlue" type="button" value="Treshold Blue" />
+		</div>
+
+		<div id="wifi_connect_credentials_errors"></div>
+		<h4 id="wifi_connect_status"></h4>
+	</div>
+		
+	</body>
+<html>
